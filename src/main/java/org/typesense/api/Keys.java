@@ -32,27 +32,17 @@ public class Keys {
         return this.apiCall.get(Keys.RESOURCEPATH, null, ApiKeysResponse.class);
     }
 
-    public String generateScopedSearchKey(String searchKey, Map<String, Object> parameters){
+    public String generateScopedSearchKey(String searchKey, Map<String, Object> parameters) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        String params = "";
-        try {
-            params = mapper.writeValueAsString(parameters);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        String params = mapper.writeValueAsString(parameters);
 
-        byte[] hmac256 = null;
-        try{
-            Mac mac = Mac.getInstance("HmacSHA256");
-            SecretKeySpec sks = new SecretKeySpec(searchKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-            mac.init(sks);
-            hmac256 = mac.doFinal(params.getBytes(StandardCharsets.UTF_8));
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        Mac mac = Mac.getInstance("HmacSHA256");
+        SecretKeySpec sks = new SecretKeySpec(searchKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        mac.init(sks);
+        byte[] hmac256 = mac.doFinal(params.getBytes(StandardCharsets.UTF_8));
         String digest = Base64.getEncoder().encodeToString(hmac256);
-        String keyPrefix = searchKey.substring(0,4);
+        String keyPrefix = searchKey.substring(0, 4);
         String rawScopedKey = digest + keyPrefix + params;
-        return  Base64.getEncoder().encodeToString(rawScopedKey.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(rawScopedKey.getBytes(StandardCharsets.UTF_8));
     }
 }

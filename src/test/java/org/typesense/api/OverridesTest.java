@@ -1,15 +1,19 @@
 package org.typesense.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.typesense.model.SearchOverride;
+import org.typesense.model.SearchOverrideDeleteResponse;
 import org.typesense.model.SearchOverrideExclude;
 import org.typesense.model.SearchOverrideInclude;
 import org.typesense.model.SearchOverrideRule;
 import org.typesense.model.SearchOverrideSchema;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.typesense.model.SearchOverridesResponse;
 
 class OverridesTest {
 
@@ -45,21 +49,53 @@ class OverridesTest {
                 .includes(searchOverrideIncludes)
                 .excludes(searchOverrideExcludes);
 
-        System.out.println(client.collections("books").overrides().upsert("apple", searchOverrideSchema));
+        SearchOverride result = client.collections("books").overrides().upsert("apple", searchOverrideSchema);
+
+        assertEquals("apple", result.getRule().getQuery());
+        assertEquals(SearchOverrideRule.MatchEnum.EXACT, result.getRule().getMatch());
+        assertEquals(searchOverrideExcludes, result.getExcludes());
+        assertEquals(searchOverrideIncludes, result.getIncludes());
     }
 
     @Test
     void testRetrieveAll() throws Exception {
-        System.out.println(this.client.collections("books").overrides().retrieve());
+        SearchOverridesResponse result = this.client.collections("books").overrides().retrieve();
+
+        SearchOverrideSchema searchOverrideSchema = new SearchOverrideSchema();
+        List<SearchOverrideInclude> searchOverrideIncludes = new ArrayList<>();
+        searchOverrideIncludes.add(new SearchOverrideInclude().id("422").position(1));
+        searchOverrideSchema.rule(new SearchOverrideRule().query("apple").match(SearchOverrideRule.MatchEnum.EXACT))
+                .includes(searchOverrideIncludes);
+
+        assertEquals(1, result.getOverrides().size());
+
+        SearchOverride searchOverride = result.getOverrides().get(0);
+
+        assertEquals("apple", searchOverride.getRule().getQuery());
+        assertEquals(SearchOverrideRule.MatchEnum.EXACT, searchOverride.getRule().getMatch());
+        assertEquals(searchOverrideIncludes, searchOverride.getIncludes());
     }
 
     @Test
     void testRetrieve() throws Exception {
-        System.out.println(this.client.collections("books").overrides("customize-apple").retrieve());
+        SearchOverride searchOverride = this.client.collections("books").overrides("customize-apple").retrieve();
+
+        SearchOverrideSchema searchOverrideSchema = new SearchOverrideSchema();
+        List<SearchOverrideInclude> searchOverrideIncludes = new ArrayList<>();
+        searchOverrideIncludes.add(new SearchOverrideInclude().id("422").position(1));
+        searchOverrideSchema.rule(new SearchOverrideRule().query("apple").match(SearchOverrideRule.MatchEnum.EXACT))
+                .includes(searchOverrideIncludes);
+
+        assertEquals("apple", searchOverride.getRule().getQuery());
+        assertEquals(SearchOverrideRule.MatchEnum.EXACT, searchOverride.getRule().getMatch());
+        assertEquals(searchOverrideIncludes, searchOverride.getIncludes());
     }
 
     @Test
     void testDelete() throws Exception {
-        System.out.println(this.client.collections("books").overrides("customize-apple").delete());
+        SearchOverrideDeleteResponse searchOverride = this.client.collections("books").overrides("customize-apple")
+                .delete();
+
+        assertEquals("customize-apple", searchOverride.getId());
     }
 }

@@ -1,8 +1,7 @@
 package org.typesense.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.typesense.model.CollectionAlias;
@@ -31,8 +30,10 @@ class AliasesTest {
     void testUpsert() throws Exception {
         CollectionAliasSchema collectionAliasSchema = new CollectionAliasSchema();
         collectionAliasSchema.collectionName("books_june11");
+        CollectionAlias result = client.aliases().upsert("books1", collectionAliasSchema);
 
-        System.out.println(client.aliases().upsert("books1", collectionAliasSchema));
+        assertEquals(result.getCollectionName(), "books_june11");
+        assertEquals(result.getName(), "books1");
     }
 
     @Test
@@ -40,29 +41,33 @@ class AliasesTest {
         CollectionAliasSchema collectionAliasSchema = new CollectionAliasSchema();
         collectionAliasSchema.collectionName("books_june11");
 
-        CollectionAlias res = client.aliases().upsert("books1 ~!@#$%^&*()_++-=/'", collectionAliasSchema);
-        assertEquals(res.getName(), "books1 ~!@#$%^&*()_++-=/'");
-        System.out.println(res);
+        CollectionAlias result = client.aliases().upsert("books1 ~!@#$%^&*()_++-=/'", collectionAliasSchema);
+        assertEquals(result.getName(), "books1 ~!@#$%^&*()_++-=/'");
+        assertEquals(result.getCollectionName(), "books_june11");
     }
 
     @Test
     void testRetrieveAll() throws Exception {
-        CollectionAliasesResponse collectionAliasesResponse = client.aliases().retrieve();
+        CollectionAliasesResponse result = client.aliases().retrieve();
 
-        System.out.println(collectionAliasesResponse);
+        assertEquals(result.getAliases().size(), 1);
+        assertEquals(result.getAliases().get(0).getName(), "books");
+        assertEquals(result.getAliases().get(0).getCollectionName(),"books_june11");
     }
 
     @Test
     void testRetrieveSingleAlias() throws Exception {
         CollectionAlias collectionAlias = client.aliases("books").retrieve();
 
-        System.out.println(collectionAlias);
+        assertEquals(collectionAlias.getName(), "books");
+        assertEquals(collectionAlias.getCollectionName(), "books_june11");
     }
 
     @Test
     void testDelete() throws Exception {
         CollectionAlias collectionAlias = client.aliases("books").delete();
 
-        System.out.println(collectionAlias);
+        assertEquals(collectionAlias.getName(), "books");
+        assertEquals(collectionAlias.getCollectionName(), "books_june11");
     }
 }

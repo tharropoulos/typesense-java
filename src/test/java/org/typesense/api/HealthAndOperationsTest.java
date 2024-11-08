@@ -1,10 +1,14 @@
 package org.typesense.api;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
+import org.typesense.model.HealthStatus;
 
 class HealthAndOperationsTest {
 
@@ -25,28 +29,34 @@ class HealthAndOperationsTest {
 
     @Test
     void testRetrieve() throws Exception {
-        System.out.println(this.client.health.retrieve());
+        HealthStatus result = this.client.health.retrieve();
+
+        assertEquals(result.isOk(), true);
     }
 
     @Test
     void testPerformSnapshot() throws Exception {
         HashMap<String, String> query = new HashMap<>();
         query.put("snapshot_path", "/tmp/typesense-data-snapshot");
-        System.out.println(client.operations.perform("snapshot", query));
+        Map<String, String> result = client.operations.perform("snapshot", query);
+
+        assertEquals(result.get("success"), true);
     }
 
     @Test
     void testPerformVote() throws Exception {
-        System.out.println(client.operations.perform("vote"));
+        Map<String, String> result = client.operations.perform("vote");
+
+        assertNotNull(result.get("success"));
     }
 
     @Test
     void testMetrics() throws Exception {
-        System.out.println(client.metrics.retrieve());
+        assertNotNull(client.metrics.retrieve());
     }
 
     @Test
     void testDebug() throws Exception {
-        System.out.println(client.debug.retrieve());
+        assertNotNull(client.debug.retrieve());
     }
 }

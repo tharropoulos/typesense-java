@@ -1,12 +1,16 @@
 package org.typesense.api;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.typesense.model.*;
-
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.typesense.model.CollectionResponse;
+import org.typesense.model.CollectionSchema;
+import org.typesense.model.Field;
+import org.typesense.model.FieldEmbed;
+import org.typesense.model.FieldEmbedModelConfig;
 
 class CollectionsTest {
 
@@ -25,25 +29,82 @@ class CollectionsTest {
         helper.teardown();
     }
 
-
     @Test
     void testRetrieveAllCollections() throws Exception {
         helper.createTestCollection();
-        CollectionResponse[] collectionResponses = client.collections().retrieve();
-        for(CollectionResponse c:collectionResponses)
-            System.out.println(c);
+        CollectionResponse[] result = client.collections().retrieve();
+
+        assertEquals(result.length, 1);
+
+        CollectionResponse collection = result[0];
+        assertEquals(collection.getName(), "books");
+        assertEquals(collection.getNumDocuments(), 0);
+        assertEquals(collection.getFields().size(), 1);
+
+        Field field = collection.getFields().get(0);
+
+        assertEquals(field.getName(), ".*");
+        assertEquals(field.getType(), "auto");
+        assertEquals(field.isOptional(), true);
+        assertEquals(field.isFacet(), false);
+        assertEquals(field.isSort(), false);
+        assertEquals(field.isIndex(), true);
+        assertEquals(field.isInfix(), false);
+        assertEquals(field.getReference(), null);
+        assertEquals(field.getNumDim(), null);
+        assertEquals(field.isStore(), true);
+        assertEquals(field.isStem(), false);
+        assertEquals(field.getEmbed(), null);
     }
 
     @Test
     void testRetrieveSingleCollection() throws Exception {
         helper.createTestCollection();
-        System.out.println(client.collections("books").retrieve());
+        CollectionResponse collection = client.collections("books").retrieve();
+
+        assertEquals(collection.getName(), "books");
+        assertEquals(collection.getNumDocuments(), 0);
+        assertEquals(collection.getFields().size(), 1);
+
+        Field field = collection.getFields().get(0);
+
+        assertEquals(field.getName(), ".*");
+        assertEquals(field.getType(), "auto");
+        assertEquals(field.isOptional(), true);
+        assertEquals(field.isFacet(), false);
+        assertEquals(field.isSort(), false);
+        assertEquals(field.isIndex(), true);
+        assertEquals(field.isInfix(), false);
+        assertEquals(field.getReference(), null);
+        assertEquals(field.getNumDim(), null);
+        assertEquals(field.isStore(), true);
+        assertEquals(field.isStem(), false);
+        assertEquals(field.getEmbed(), null);
     }
 
     @Test
     void testDeleteCollection() throws Exception {
         helper.createTestCollection();
-        System.out.println(client.collections("books").delete());
+        CollectionResponse collection = client.collections("books").delete();
+
+        assertEquals(collection.getName(), "books");
+        assertEquals(collection.getNumDocuments(), 0);
+        assertEquals(collection.getFields().size(), 1);
+
+        Field field = collection.getFields().get(0);
+
+        assertEquals(field.getName(), ".*");
+        assertEquals(field.getType(), "auto");
+        assertEquals(field.isOptional(), true);
+        assertEquals(field.isFacet(), false);
+        assertEquals(field.isSort(), false);
+        assertEquals(field.isIndex(), true);
+        assertEquals(field.isInfix(), false);
+        assertEquals(field.getReference(), null);
+        assertEquals(field.getNumDim(), null);
+        assertEquals(field.isStore(), true);
+        assertEquals(field.isStem(), false);
+        assertEquals(field.getEmbed(), null);
     }
 
     @Test
@@ -57,8 +118,25 @@ class CollectionsTest {
         CollectionSchema collectionSchema = new CollectionSchema();
         collectionSchema.name("Countries").fields(fields);
 
-        CollectionResponse cr = client.collections().create(collectionSchema);
-        System.out.println(cr);
+        CollectionResponse collection = client.collections().create(collectionSchema);
+
+        assertEquals(collection.getName(), "Countries");
+        assertEquals(collection.getNumDocuments(), 0);
+        assertEquals(collection.getFields().size(), 3);
+        
+        Field field = collection.getFields().get(0);
+        assertEquals(field.getName(), "countryName");
+        assertEquals(field.getType(), "string");
+        assertEquals(field.isOptional(), false);
+        assertEquals(field.isFacet(), false);
+        assertEquals(field.isSort(), false);
+        assertEquals(field.isIndex(), true);
+        assertEquals(field.isInfix(), false);
+        assertEquals(field.getReference(), null);
+        assertEquals(field.getNumDim(), null);
+        assertEquals(field.isStore(), true);
+        assertEquals(field.isStem(), false);
+        assertEquals(field.getEmbed(), null);
     }
 
     @Test
@@ -76,7 +154,25 @@ class CollectionsTest {
         CollectionSchema collectionSchema = new CollectionSchema();
         collectionSchema.name("titles").fields(fields);
 
-        //CollectionResponse cr = client.collections().create(collectionSchema);
-        //System.out.println(cr);
+        CollectionResponse collection = client.collections().create(collectionSchema);
+
+        assertEquals(collection.getName(), "titles");
+        assertEquals(collection.getNumDocuments(), 0);
+
+        Field field = collection.getFields().get(1);
+        assertEquals(field.getName(), "embedding");
+        assertEquals(field.getType(), "float[]");
+        assertEquals(field.isOptional(), false);
+        assertEquals(field.isFacet(), false);
+        assertEquals(field.isSort(), false);
+        assertEquals(field.isIndex(), true);
+        assertEquals(field.isInfix(), false);
+        assertEquals(field.getReference(), null);
+        assertEquals(field.getNumDim(), 384);
+        assertEquals(field.getVecDist(), "cosine");
+        assertEquals(field.isStore(), true);
+        assertEquals(field.isStem(), false);
+        assertEquals(field.getEmbed().getFrom().get(0), "title");
+        assertEquals(field.getEmbed().getModelConfig().getModelName(), "ts/e5-small");
     }
 }

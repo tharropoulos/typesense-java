@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import org.typesense.model.AnalyticsRule;
 import org.typesense.model.AnalyticsRuleCreate;
 import org.typesense.model.AnalyticsRuleCreateParams;
+import org.typesense.model.AnalyticsRuleType;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -34,14 +35,9 @@ public class AnalyticsRuleSerializer {
         
         if (node.has("type")) {
             String typeStr = node.get("type").asText();
-            if ("counter".equals(typeStr)) {
-                rule.type(AnalyticsRuleCreate.TypeEnum.COUNTER);
-            } else if ("popular_queries".equals(typeStr)) {
-                rule.type(AnalyticsRuleCreate.TypeEnum.POPULAR_QUERIES);
-            } else if ("nohits_queries".equals(typeStr)) {
-                rule.type(AnalyticsRuleCreate.TypeEnum.NOHITS_QUERIES);
-            } else if ("log".equals(typeStr)) {
-                rule.type(AnalyticsRuleCreate.TypeEnum.LOG);
+            AnalyticsRuleType type = AnalyticsRuleType.fromValue(typeStr);
+            if (type != null) {
+                rule.type(type);
             }
         }
         

@@ -33,6 +33,7 @@ import org.typesense.resources.Node;
 import org.typesense.model.AnalyticsRuleCreate;
 import org.typesense.model.AnalyticsRuleCreateParams;
 import org.typesense.model.AnalyticsRule;
+import org.typesense.model.AnalyticsRuleType;
 import org.typesense.api.AnalyticsRules;
 
 public class Helper {
@@ -170,7 +171,7 @@ public class Helper {
         
         AnalyticsRuleCreate analyticsRule = new AnalyticsRuleCreate()
                 .name(ruleName)
-                .type(AnalyticsRuleCreate.TypeEnum.COUNTER)
+                .type(AnalyticsRuleType.COUNTER)
                 .collection("analytics_data")
                 .eventType("click")
                 .params(new AnalyticsRuleCreateParams()

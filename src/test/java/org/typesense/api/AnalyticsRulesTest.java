@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.typesense.model.AnalyticsRule;
 import org.typesense.model.AnalyticsRuleCreate;
 import org.typesense.model.AnalyticsRuleCreateParams;
+import org.typesense.model.AnalyticsRuleType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +78,7 @@ class AnalyticsRulesTest {
         
         AnalyticsRuleCreate analyticsRule = new AnalyticsRuleCreate()
                 .name(ruleName)
-                .type(AnalyticsRuleCreate.TypeEnum.COUNTER)
+                .type(AnalyticsRuleType.COUNTER)
                 .collection("analytics_data")
                 .eventType("click")
                 .params(new AnalyticsRuleCreateParams()
@@ -95,7 +96,7 @@ class AnalyticsRulesTest {
         AnalyticsRule createdRule = result.getFirstRule();
         assertNotNull(createdRule);
         assertEquals(ruleName, createdRule.getName());
-        assertEquals(AnalyticsRuleCreate.TypeEnum.COUNTER, createdRule.getType());
+        assertEquals(AnalyticsRuleType.COUNTER, createdRule.getType());
         assertEquals("analytics_data", createdRule.getCollection());
         assertEquals("click", createdRule.getEventType());
     }
@@ -107,7 +108,7 @@ class AnalyticsRulesTest {
         
         AnalyticsRuleCreate analyticsRule = new AnalyticsRuleCreate()
                 .name(ruleName)
-                .type(AnalyticsRuleCreate.TypeEnum.COUNTER)
+                .type(AnalyticsRuleType.COUNTER)
                 .collection("analytics_data")
                 .eventType("click")
                 .params(new AnalyticsRuleCreateParams()
@@ -133,7 +134,7 @@ class AnalyticsRulesTest {
 
         assertNotNull(foundRule, "rule not found");
         assertEquals(ruleName, foundRule.getName());
-        assertEquals(AnalyticsRuleCreate.TypeEnum.COUNTER, foundRule.getType());
+        assertEquals(AnalyticsRuleType.COUNTER, foundRule.getType());
         assertEquals("analytics_data", foundRule.getCollection());
         assertEquals("click", foundRule.getEventType());
     }
@@ -145,7 +146,7 @@ class AnalyticsRulesTest {
         
         AnalyticsRuleCreate analyticsRule = new AnalyticsRuleCreate()
                 .name(ruleName)
-                .type(AnalyticsRuleCreate.TypeEnum.COUNTER)
+                .type(AnalyticsRuleType.COUNTER)
                 .collection("analytics_data")
                 .eventType("click")
                 .params(new AnalyticsRuleCreateParams()
@@ -160,7 +161,7 @@ class AnalyticsRulesTest {
         AnalyticsRule result = this.client.analytics().rules(ruleName).retrieve();
         assertNotNull(result);
         assertEquals(ruleName, result.getName());
-        assertEquals(AnalyticsRuleCreate.TypeEnum.COUNTER, result.getType());
+        assertEquals(AnalyticsRuleType.COUNTER, result.getType());
         assertEquals("analytics_data", result.getCollection());
         assertEquals("click", result.getEventType());
     }
@@ -172,7 +173,7 @@ class AnalyticsRulesTest {
         
         AnalyticsRuleCreate analyticsRule = new AnalyticsRuleCreate()
                 .name(ruleName)
-                .type(AnalyticsRuleCreate.TypeEnum.COUNTER)
+                .type(AnalyticsRuleType.COUNTER)
                 .collection("analytics_data")
                 .eventType("click")
                 .params(new AnalyticsRuleCreateParams()

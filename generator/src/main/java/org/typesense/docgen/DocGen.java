@@ -21,6 +21,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.ThisExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.yaml.snakeyaml.Yaml;
 
@@ -262,10 +263,12 @@ public final class DocGen {
     static final class ApiCallSite {
         final String verb;
         final Expression pathArg;
+        final MethodCallExpr call;
 
-        ApiCallSite(String verb, Expression pathArg) {
+        ApiCallSite(String verb, Expression pathArg, MethodCallExpr call) {
             this.verb = verb;
             this.pathArg = pathArg;
+            this.call = call;
         }
     }
 
@@ -279,7 +282,7 @@ public final class DocGen {
         MethodCallExpr call = calls.get(0);
         String verb = call.getNameAsString().toUpperCase(Locale.ROOT);
         if (call.getArguments().isEmpty()) return null;
-        return new ApiCallSite(verb, call.getArgument(0));
+        return new ApiCallSite(verb, call.getArgument(0), call);
     }
 
     private static boolean isApiCall(MethodCallExpr call) {
@@ -478,8 +481,8 @@ public final class DocGen {
         return renderJavadocBlock(lines, javadocIndent(c));
     }
 
-    private static boolean writeJavadoc(MethodDeclaration m, OpInfo op) {
-        String content = renderJavadocContent(op);
+    private static boolean writeJavadoc(MethodDeclaration m, OpInfo op, ApiCallSite site) {
+        String content = renderJavadocContent(m, op, site);
         if (m.getJavadocComment().isPresent()) {
             String existing = m.getJavadocComment().get().getContent();
             if (!isGeneratedJavadoc(existing)) {
@@ -516,7 +519,7 @@ public final class DocGen {
         return content.replace("\r\n", "\n").trim();
     }
 
-    private static String renderJavadocContent(OpInfo op) {
+    private static String renderJavadocContent(MethodDeclaration m, OpInfo op, ApiCallSite site) {
         List<String> lines = new ArrayList<String>();
         String summary = sanitizeJavadocText(firstSentence(op.summary));
         if (summary.isEmpty()) summary = sanitizeJavadocText(firstSentence(op.description));
@@ -535,22 +538,163 @@ public final class DocGen {
         lines.add("");
         lines.add("<p>");
         lines.add("HTTP: " + op.method + " " + op.path);
+
+        boolean hasParamTags = !m.getParameters().isEmpty();
+        boolean hasReturnTag = !"void".equals(m.getTypeAsString());
+        boolean hasThrowsTags = !m.getThrownExceptions().isEmpty();
+        if (hasParamTags || hasReturnTag || hasThrowsTags || TAG_TO_DOCS.containsKey(op.tag)) {
+            lines.add("");
+        }
+        addMethodParamTags(lines, m.getParameters(), site);
+        if (hasReturnTag) {
+            lines.add("@return " + describeReturn(m));
+        }
+        for (ReferenceType thrown : m.getThrownExceptions()) {
+            lines.add("@throws " + thrown.asString() + " if the request fails");
+        }
+
         String section = TAG_TO_DOCS.get(op.tag);
         if (section != null) {
             lines.add("");
             lines.add("@see <a href=\"" + DOCS_BASE_URL + section + "\">Typesense docs</a>");
         }
+        return renderJavadocBlock(lines, javadocIndent(m));
+    }
+
+    private static void addMethodParamTags(List<String> lines, NodeList<Parameter> parameters, ApiCallSite site) {
+        for (Parameter p : parameters) {
+            String name = p.getNameAsString();
+            lines.add("@param " + name + " " + describeMethodParam(p, site));
+        }
+    }
+
+    private static void addConstructorParamTags(List<String> lines, NodeList<Parameter> parameters) {
+        for (Parameter p : parameters) {
+            String name = p.getNameAsString();
+            lines.add("@param " + name + " " + describeConstructorParam(p));
+        }
+    }
+
+    private static String describeMethodParam(Parameter p, ApiCallSite site) {
+        String name = p.getNameAsString();
+        String type = codeType(p.getTypeAsString());
+        if (site != null) {
+            if (expressionReferencesName(apiCallBodyArg(site), name)) {
+                return "the " + type + " request body";
+            }
+            if (expressionReferencesName(apiCallQueryArg(site), name)) {
+                return "the " + type + " query parameters";
+            }
+            if (expressionReferencesName(site.pathArg, name)) {
+                return "the " + type + " path parameter";
+            }
+        }
+        return "the " + type + " " + humanizeIdentifier(name);
+    }
+
+    private static String describeConstructorParam(Parameter p) {
+        String name = p.getNameAsString();
+        String type = p.getTypeAsString();
+        if ("ApiCall".equals(type)) {
+            return "the " + codeType(type) + " instance used to send requests";
+        }
+        if ("Configuration".equals(type)) {
+            return "the client configuration";
+        }
+        if ("OkHttpClient".equals(type)) {
+            return "the HTTP client";
+        }
+        if (name.endsWith("Id") || name.endsWith("Name")) {
+            return "the " + codeType(type) + " path parameter";
+        }
+        return "the " + codeType(type) + " " + humanizeIdentifier(name);
+    }
+
+    private static String describeReturn(MethodDeclaration m) {
+        String type = m.getTypeAsString();
+        if ("String".equals(type)) {
+            return "the raw response body";
+        }
+        if (type.endsWith("[]")) {
+            return "the " + codeType(type) + " response array";
+        }
+        if (type.startsWith("Map<")) {
+            return "the " + codeType(type) + " response map";
+        }
+        return "the " + codeType(type) + " response";
+    }
+
+    private static Expression apiCallBodyArg(ApiCallSite site) {
+        if (!"POST".equals(site.verb) && !"PUT".equals(site.verb) && !"PATCH".equals(site.verb)) {
+            return null;
+        }
+        NodeList<Expression> args = site.call.getArguments();
+        return args.size() > 1 ? args.get(1) : null;
+    }
+
+    private static Expression apiCallQueryArg(ApiCallSite site) {
+        NodeList<Expression> args = site.call.getArguments();
+        if ("GET".equals(site.verb) || "DELETE".equals(site.verb)) {
+            return args.size() > 1 ? args.get(1) : null;
+        }
+        if ("POST".equals(site.verb) || "PUT".equals(site.verb) || "PATCH".equals(site.verb)) {
+            return args.size() > 2 ? args.get(2) : null;
+        }
+        return null;
+    }
+
+    private static boolean expressionReferencesName(Expression expr, String name) {
+        if (expr == null || name == null) return false;
+        for (NameExpr n : expr.findAll(NameExpr.class)) {
+            if (name.equals(n.getNameAsString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String codeType(String type) {
+        return "{@code " + type + "}";
+    }
+
+    private static String renderJavadocBlock(List<String> lines, String indent) {
         StringBuilder sb = new StringBuilder();
         sb.append('\n');
         for (String line : lines) {
             if (line.isEmpty()) {
-                sb.append("     *\n");
+                sb.append(indent).append(" *\n");
             } else {
-                sb.append("     * ").append(line).append('\n');
+                sb.append(indent).append(" * ").append(line).append('\n');
             }
         }
-        sb.append("     ");
+        sb.append(indent).append(" ");
         return sb.toString();
+    }
+
+    private static String javadocIndent(Node node) {
+        int depth = 0;
+        Optional<Node> parent = node.getParentNode();
+        while (parent.isPresent()) {
+            Node current = parent.get();
+            if (current instanceof ClassOrInterfaceDeclaration) {
+                depth++;
+            }
+            parent = current.getParentNode();
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < depth; i++) {
+            sb.append("    ");
+        }
+        return sb.toString();
+    }
+
+    private static String humanizeIdentifier(String identifier) {
+        if (identifier == null || identifier.isEmpty()) return "";
+        String spaced = identifier.replaceAll("([a-z0-9])([A-Z])", "$1 $2")
+                .replace('_', ' ')
+                .replace('-', ' ')
+                .toLowerCase(Locale.ROOT);
+        return sanitizeJavadocText(spaced);
     }
 
     private static String sanitizeJavadocText(String s) {

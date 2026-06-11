@@ -2,6 +2,7 @@ package org.typesense.docgen;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
@@ -226,6 +227,14 @@ public final class DocGen {
         boolean changed = false;
         for (ClassOrInterfaceDeclaration cls : cu.findAll(ClassOrInterfaceDeclaration.class)) {
             String className = cls.getNameAsString();
+            if (writeClassJavadoc(cls)) {
+                changed = true;
+            }
+            for (ConstructorDeclaration c : cls.getConstructors()) {
+                if (writeConstructorJavadoc(c, className)) {
+                    changed = true;
+                }
+            }
             for (MethodDeclaration m : cls.getMethods()) {
                 if (!m.getBody().isPresent()) continue;
                 ApiCallSite site = findUniqueApiCall(m);
@@ -242,7 +251,7 @@ public final class DocGen {
                             + " -> " + key);
                     continue;
                 }
-                if (writeJavadoc(m, op)) {
+                if (writeJavadoc(m, op, site)) {
                     changed = true;
                 }
             }
@@ -420,6 +429,55 @@ public final class DocGen {
         return path;
     }
 
+    private static boolean writeClassJavadoc(ClassOrInterfaceDeclaration cls) {
+        if (!cls.isPublic()) {
+            return false;
+        }
+        String content = renderClassJavadocContent(cls);
+        if (cls.getJavadocComment().isPresent()) {
+            String existing = cls.getJavadocComment().get().getContent();
+            if (!isGeneratedClassJavadoc(existing)) {
+                return false;
+            }
+            if (normalizeJavadocContent(existing).equals(normalizeJavadocContent(content))) {
+                return false;
+            }
+        }
+        cls.setJavadocComment(content);
+        return true;
+    }
+
+    private static String renderClassJavadocContent(ClassOrInterfaceDeclaration cls) {
+        List<String> lines = new ArrayList<String>();
+        lines.add("Typesense " + humanizeIdentifier(cls.getNameAsString()) + " API wrapper.");
+        return renderJavadocBlock(lines, javadocIndent(cls));
+    }
+
+    private static boolean writeConstructorJavadoc(ConstructorDeclaration c, String className) {
+        if (!c.isPublic()) {
+            return false;
+        }
+        String content = renderConstructorJavadocContent(c, className);
+        if (c.getJavadocComment().isPresent()) {
+            String existing = c.getJavadocComment().get().getContent();
+            if (!isGeneratedConstructorJavadoc(existing)) {
+                return false;
+            }
+            if (normalizeJavadocContent(existing).equals(normalizeJavadocContent(content))) {
+                return false;
+            }
+        }
+        c.setJavadocComment(content);
+        return true;
+    }
+
+    private static String renderConstructorJavadocContent(ConstructorDeclaration c, String className) {
+        List<String> lines = new ArrayList<String>();
+        lines.add("Creates a new " + className + " instance.");
+        addConstructorParamTags(lines, c.getParameters());
+        return renderJavadocBlock(lines, javadocIndent(c));
+    }
+
     private static boolean writeJavadoc(MethodDeclaration m, OpInfo op) {
         String content = renderJavadocContent(op);
         if (m.getJavadocComment().isPresent()) {
@@ -439,6 +497,18 @@ public final class DocGen {
         return content != null
                 && content.contains("HTTP: ")
                 && content.contains("Typesense docs");
+    }
+
+    private static boolean isGeneratedClassJavadoc(String content) {
+        return content != null
+                && content.contains("Typesense ")
+                && content.contains(" API wrapper");
+    }
+
+    private static boolean isGeneratedConstructorJavadoc(String content) {
+        return content != null
+                && content.contains("Creates a new ")
+                && content.contains(" instance.");
     }
 
     private static String normalizeJavadocContent(String content) {

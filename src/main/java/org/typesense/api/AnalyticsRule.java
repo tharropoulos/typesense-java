@@ -20,11 +20,33 @@ public class AnalyticsRule {
         this.serializer = serializer;
     }
 
+    /**
+     * Retrieves an analytics rule.
+     *
+     * <p>
+     * Retrieve the details of an analytics rule, given it's name
+     *
+     * <p>
+     * HTTP: GET /analytics/rules/{ruleName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
+     */
     public org.typesense.model.AnalyticsRule retrieve() throws Exception {
         String response = this.apiCall.get(this.getEndpoint(), null, String.class);
         return serializer.parseFromJson(response);
     }
 
+    /**
+     * Delete an analytics rule.
+     *
+     * <p>
+     * Permanently deletes an analytics rule, given it's name
+     *
+     * <p>
+     * HTTP: DELETE /analytics/rules/{ruleName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
+     */
     public org.typesense.model.AnalyticsRule delete() throws Exception {
         String response = this.apiCall.delete(this.getEndpoint(), null, String.class);
         org.typesense.model.AnalyticsRule result = new org.typesense.model.AnalyticsRule();
@@ -32,6 +54,17 @@ public class AnalyticsRule {
         return result;
     }
 
+    /**
+     * Upserts an analytics rule.
+     *
+     * <p>
+     * Upserts an analytics rule with the given name.
+     *
+     * <p>
+     * HTTP: PUT /analytics/rules/{ruleName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
+     */
     public org.typesense.model.AnalyticsRule update(AnalyticsRuleUpdate rule) throws Exception {
         return this.apiCall.put(this.getEndpoint(), rule, null, org.typesense.model.AnalyticsRule.class);
     }

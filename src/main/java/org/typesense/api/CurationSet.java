@@ -15,14 +15,47 @@ public class CurationSet {
         this.apiCall = apiCall;
     }
 
+    /**
+     * Retrieve a curation set.
+     *
+     * <p>
+     * Retrieve a specific curation set by its name
+     *
+     * <p>
+     * HTTP: GET /curation_sets/{curationSetName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/curation.html">Typesense docs</a>
+     */
     public CurationSetCreateSchema retrieve() throws Exception {
         return this.apiCall.get(this.getEndpoint(), null, CurationSetCreateSchema.class);
     }
 
+    /**
+     * Create or update a curation set.
+     *
+     * <p>
+     * Create or update a curation set with the given name
+     *
+     * <p>
+     * HTTP: PUT /curation_sets/{curationSetName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/curation.html">Typesense docs</a>
+     */
     public CurationSetSchema upsert(CurationSetCreateSchema curationSetCreateSchema) throws Exception {
         return this.apiCall.put(this.getEndpoint(), curationSetCreateSchema, null, CurationSetSchema.class);
     }
 
+    /**
+     * Delete a curation set.
+     *
+     * <p>
+     * Delete a specific curation set by its name
+     *
+     * <p>
+     * HTTP: DELETE /curation_sets/{curationSetName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/curation.html">Typesense docs</a>
+     */
     public CurationSetDeleteSchema delete() throws Exception {
         return this.apiCall.delete(this.getEndpoint(), null, CurationSetDeleteSchema.class);
     }

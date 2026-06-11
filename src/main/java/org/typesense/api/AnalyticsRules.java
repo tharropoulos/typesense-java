@@ -20,11 +20,33 @@ public class AnalyticsRules {
         this.serializer = serializer;
     }
 
+    /**
+     * Create analytics rule(s).
+     *
+     * <p>
+     * Create one or more analytics rules. You can send a single rule object or an array of rule objects.
+     *
+     * <p>
+     * HTTP: POST /analytics/rules
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
+     */
     public AnalyticsRulesResponse create(List<AnalyticsRuleCreate> rules) throws Exception {
         String response = this.apiCall.post(RESOURCE_PATH, rules, null, String.class);
         return parseCreateResponse(response);
     }
 
+    /**
+     * Retrieve analytics rules.
+     *
+     * <p>
+     * Retrieve all analytics rules. Use the optional rule_tag filter to narrow down results.
+     *
+     * <p>
+     * HTTP: GET /analytics/rules
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
+     */
     public List<AnalyticsRule> retrieve() throws Exception {
         String response = this.apiCall.get(RESOURCE_PATH, null, String.class);
         return parseRetrieveResponse(response);

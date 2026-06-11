@@ -13,10 +13,32 @@ public class AnalyticsEvents {
         this.apiCall = apiCall;
     }
 
+    /**
+     * Create an analytics event.
+     *
+     * <p>
+     * Submit a single analytics event. The event must correspond to an existing analytics rule by name.
+     *
+     * <p>
+     * HTTP: POST /analytics/events
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
+     */
     public AnalyticsEventCreateResponse create(AnalyticsEvent event) throws Exception {
         return this.apiCall.post(RESOURCE_PATH, event, null, AnalyticsEventCreateResponse.class);
     }
 
+    /**
+     * Retrieve analytics events.
+     *
+     * <p>
+     * Retrieve the most recent events for a user and rule.
+     *
+     * <p>
+     * HTTP: GET /analytics/events
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
+     */
     public AnalyticsEventsResponse retrieve(Map<String, Object> params) throws Exception {
         return this.apiCall.get(RESOURCE_PATH, params, AnalyticsEventsResponse.class);
     }

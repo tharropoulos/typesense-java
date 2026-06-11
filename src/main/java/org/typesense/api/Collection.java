@@ -34,14 +34,47 @@ public class Collection {
         this.individualSynonyms = new HashMap<>();
     }
 
+    /**
+     * Retrieve a single collection.
+     *
+     * <p>
+     * Retrieve the details of a collection, given its name.
+     *
+     * <p>
+     * HTTP: GET /collections/{collectionName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
+     */
     public CollectionResponse retrieve() throws Exception {
         return this.apiCall.get(endpoint, null, CollectionResponse.class);
     }
 
+    /**
+     * Update a collection.
+     *
+     * <p>
+     * Update a collection's schema to modify the fields and their types.
+     *
+     * <p>
+     * HTTP: PATCH /collections/{collectionName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
+     */
     public CollectionUpdateSchema update(CollectionUpdateSchema c) throws Exception {
         return this.apiCall.patch(endpoint, c, null, CollectionUpdateSchema.class);
     }
 
+    /**
+     * Delete a collection.
+     *
+     * <p>
+     * Permanently drops a collection. This action cannot be undone. For large collections, this might have an impact on read latencies.
+     *
+     * <p>
+     * HTTP: DELETE /collections/{collectionName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
+     */
     public CollectionResponse delete() throws Exception {
         return this.apiCall.delete(endpoint, null, CollectionResponse.class);
     }

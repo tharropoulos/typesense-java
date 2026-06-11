@@ -12,10 +12,32 @@ public class CurationSets {
         this.apiCall = apiCall;
     }
 
+    /**
+     * Create or update a curation set.
+     *
+     * <p>
+     * Create or update a curation set with the given name
+     *
+     * <p>
+     * HTTP: PUT /curation_sets/{curationSetName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/curation.html">Typesense docs</a>
+     */
     public CurationSetSchema upsert(String curationSetName, CurationSetCreateSchema curationSetCreateSchema) throws Exception {
         return this.apiCall.put(getEndpoint(curationSetName), curationSetCreateSchema, null, CurationSetSchema.class);
     }
 
+    /**
+     * Retrieve a curation set.
+     *
+     * <p>
+     * Retrieve a specific curation set by its name
+     *
+     * <p>
+     * HTTP: GET /curation_sets/{curationSetName}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/curation.html">Typesense docs</a>
+     */
     public CurationSetSchema[] retrieve() throws Exception {
         return this.apiCall.get(this.getEndpoint(null), null, CurationSetSchema[].class);
     }

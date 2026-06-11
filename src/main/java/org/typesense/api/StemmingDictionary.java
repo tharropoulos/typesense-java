@@ -12,6 +12,17 @@ public class StemmingDictionary {
     }
 
 
+    /**
+     * Retrieve a stemming dictionary.
+     *
+     * <p>
+     * Fetch details of a specific stemming dictionary.
+     *
+     * <p>
+     * HTTP: GET /stemming/dictionaries/{dictionaryId}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/stemming.html">Typesense docs</a>
+     */
     public org.typesense.model.StemmingDictionary retrieve() throws Exception {
         return this.apiCall.get(this.getEndpoint(), null, org.typesense.model.StemmingDictionary.class);
     }

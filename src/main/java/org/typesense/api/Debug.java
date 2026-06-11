@@ -11,6 +11,14 @@ public class Debug {
         this.apiCall = apiCall;
     }
 
+    /**
+     * Print debugging information.
+     *
+     * <p>
+     * HTTP: GET /debug
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/cluster-operations.html#debug">Typesense docs</a>
+     */
     public Map<String, Object> retrieve() throws Exception {
         return this.apiCall.get(RESOURCEPATH, null, Map.class);
     }

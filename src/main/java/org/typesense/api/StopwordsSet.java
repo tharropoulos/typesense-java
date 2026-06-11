@@ -13,10 +13,32 @@ public class StopwordsSet {
         this.apiCall = apiCall;
     }
 
+    /**
+     * Retrieves a stopwords set.
+     *
+     * <p>
+     * Retrieve the details of a stopwords set, given it's name.
+     *
+     * <p>
+     * HTTP: GET /stopwords/{setId}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/stopwords.html">Typesense docs</a>
+     */
     public StopwordsSetRetrieveSchema retrieve() throws Exception {
         return this.apiCall.get(this.getEndpoint(), null, StopwordsSetRetrieveSchema.class);
     }
 
+    /**
+     * Delete a stopwords set.
+     *
+     * <p>
+     * Permanently deletes a stopwords set, given it's name.
+     *
+     * <p>
+     * HTTP: DELETE /stopwords/{setId}
+     *
+     * @see <a href="https://typesense.org/docs/latest/api/stopwords.html">Typesense docs</a>
+     */
     public StopwordsSetSchema delete() throws Exception {
         return this.apiCall.delete(this.getEndpoint(), null, StopwordsSetSchema.class);
     }

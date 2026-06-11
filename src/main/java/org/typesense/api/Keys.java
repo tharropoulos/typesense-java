@@ -12,11 +12,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Map;
 
+/**
+ * Typesense keys API wrapper.
+ */
 public class Keys {
 
     public static final String RESOURCEPATH = "/keys";
     private ApiCall apiCall;
 
+    /**
+     * Creates a new Keys instance.
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public Keys(ApiCall apiCall) {
         this.apiCall = apiCall;
     }
@@ -29,6 +36,10 @@ public class Keys {
      *
      * <p>
      * HTTP: POST /keys
+     *
+     * @param apiKeySchema the {@code ApiKeySchema} request body
+     * @return the {@code ApiKey} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/api-keys.html">Typesense docs</a>
      */
@@ -44,6 +55,9 @@ public class Keys {
      *
      * <p>
      * HTTP: GET /keys
+     *
+     * @return the {@code ApiKeysResponse} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/api-keys.html">Typesense docs</a>
      */

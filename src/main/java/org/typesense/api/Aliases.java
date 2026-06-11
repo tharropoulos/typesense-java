@@ -5,11 +5,18 @@ import org.typesense.model.CollectionAlias;
 import org.typesense.model.CollectionAliasSchema;
 import org.typesense.model.CollectionAliasesResponse;
 
+/**
+ * Typesense aliases API wrapper.
+ */
 public class Aliases {
 
     private ApiCall apiCall;
     public final static String RESOURCE_PATH = "/aliases";
 
+    /**
+     * Creates a new Aliases instance.
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public Aliases(ApiCall apiCall) {
         this.apiCall = apiCall;
     }
@@ -22,6 +29,11 @@ public class Aliases {
      *
      * <p>
      * HTTP: PUT /aliases/{aliasName}
+     *
+     * @param name the {@code String} path parameter
+     * @param collectionAliasSchema the {@code CollectionAliasSchema} request body
+     * @return the {@code CollectionAlias} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
      */
@@ -38,6 +50,9 @@ public class Aliases {
      *
      * <p>
      * HTTP: GET /aliases
+     *
+     * @return the {@code CollectionAliasesResponse} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
      */

@@ -3,11 +3,19 @@ package org.typesense.api;
 import org.typesense.api.utils.URLEncoding;
 import org.typesense.model.CollectionAlias;
 
+/**
+ * Typesense alias API wrapper.
+ */
 public class Alias {
 
     public ApiCall apiCall;
     public String name;
 
+    /**
+     * Creates a new Alias instance.
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     * @param name the {@code String} name
+     */
     public Alias(ApiCall apiCall, String name) {
         this.apiCall = apiCall;
         this.name = name;
@@ -22,6 +30,9 @@ public class Alias {
      * <p>
      * HTTP: GET /aliases/{aliasName}
      *
+     * @return the {@code CollectionAlias} response
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
      */
     public CollectionAlias retrieve() throws Exception {
@@ -33,6 +44,9 @@ public class Alias {
      *
      * <p>
      * HTTP: DELETE /aliases/{aliasName}
+     *
+     * @return the {@code CollectionAlias} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
      */

@@ -9,10 +9,17 @@ import org.typesense.model.StemmingDictionaryWords;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Typesense stemming dictionaries API wrapper.
+ */
 public class StemmingDictionaries {
     private final ApiCall apiCall;
     public final static String RESOURCE_PATH = "/stemming/dictionaries";
 
+    /**
+     * Creates a new StemmingDictionaries instance.
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public StemmingDictionaries(ApiCall apiCall) {
         this.apiCall = apiCall;
     }
@@ -25,6 +32,11 @@ public class StemmingDictionaries {
      *
      * <p>
      * HTTP: POST /stemming/dictionaries/import
+     *
+     * @param dictionaryId the {@code String} dictionary id
+     * @param wordRootCombinations the {@code String} request body
+     * @return the raw response body
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/stemming.html">Typesense docs</a>
      */
@@ -42,6 +54,11 @@ public class StemmingDictionaries {
      *
      * <p>
      * HTTP: POST /stemming/dictionaries/import
+     *
+     * @param dictionaryId the {@code String} dictionary id
+     * @param wordRootCombinations the {@code List<StemmingDictionaryWords>} word root combinations
+     * @return the {@code List<StemmingDictionaryWords>} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/stemming.html">Typesense docs</a>
      */
@@ -76,6 +93,9 @@ public class StemmingDictionaries {
      *
      * <p>
      * HTTP: GET /stemming/dictionaries
+     *
+     * @return the {@code StemmingDictionariesRetrieveSchema} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/stemming.html">Typesense docs</a>
      */

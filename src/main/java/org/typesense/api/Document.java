@@ -3,6 +3,9 @@ package org.typesense.api;
 import java.util.Map;
 import org.typesense.api.utils.URLEncoding;
 
+/**
+ * Typesense document API wrapper.
+ */
 public class Document {
     private String collectionName;
     private String documentId;
@@ -27,6 +30,9 @@ public class Document {
      * <p>
      * HTTP: GET /collections/{collectionName}/documents/{documentId}
      *
+     * @return the {@code Map<String,Object>} response map
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
     public Map<String, Object> retrieve() throws Exception {
@@ -42,6 +48,9 @@ public class Document {
      * <p>
      * HTTP: DELETE /collections/{collectionName}/documents/{documentId}
      *
+     * @return the {@code Map<String,Object>} response map
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
     public Map<String, Object> delete() throws Exception {
@@ -56,6 +65,10 @@ public class Document {
      *
      * <p>
      * HTTP: PATCH /collections/{collectionName}/documents/{documentId}
+     *
+     * @param document the {@code Map<String,Object>} request body
+     * @return the {@code Map<String,Object>} response map
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */

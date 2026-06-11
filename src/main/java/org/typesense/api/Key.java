@@ -2,11 +2,19 @@ package org.typesense.api;
 
 import org.typesense.model.ApiKey;
 
+/**
+ * Typesense key API wrapper.
+ */
 public class Key {
 
     private Long id;
     private ApiCall apiCall;
 
+    /**
+     * Creates a new Key instance.
+     * @param id the {@code Long} id
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public Key(Long id, ApiCall apiCall) {
         this.id = id;
         this.apiCall = apiCall;
@@ -21,6 +29,9 @@ public class Key {
      * <p>
      * HTTP: GET /keys/{keyId}
      *
+     * @return the {@code ApiKey} response
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/api-keys.html">Typesense docs</a>
      */
     public ApiKey retrieve() throws Exception {
@@ -32,6 +43,9 @@ public class Key {
      *
      * <p>
      * HTTP: DELETE /keys/{keyId}
+     *
+     * @return the {@code ApiKey} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/api-keys.html">Typesense docs</a>
      */

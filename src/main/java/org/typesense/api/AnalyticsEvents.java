@@ -5,10 +5,17 @@ import org.typesense.model.AnalyticsEventCreateResponse;
 import org.typesense.model.AnalyticsEventsResponse;
 import java.util.Map;
 
+/**
+ * Typesense analytics events API wrapper.
+ */
 public class AnalyticsEvents {
     private final ApiCall apiCall;
     public final static String RESOURCE_PATH = "/analytics/events";
 
+    /**
+     * Creates a new AnalyticsEvents instance.
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public AnalyticsEvents(ApiCall apiCall) {
         this.apiCall = apiCall;
     }
@@ -21,6 +28,10 @@ public class AnalyticsEvents {
      *
      * <p>
      * HTTP: POST /analytics/events
+     *
+     * @param event the {@code AnalyticsEvent} request body
+     * @return the {@code AnalyticsEventCreateResponse} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
      */
@@ -36,6 +47,10 @@ public class AnalyticsEvents {
      *
      * <p>
      * HTTP: GET /analytics/events
+     *
+     * @param params the {@code Map<String,Object>} query parameters
+     * @return the {@code AnalyticsEventsResponse} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
      */

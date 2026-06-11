@@ -4,17 +4,29 @@ import org.typesense.model.AnalyticsRule;
 import org.typesense.model.AnalyticsRuleCreate;
 import java.util.List;
 
+/**
+ * Typesense analytics rules API wrapper.
+ */
 public class AnalyticsRules {
 
     private final ApiCall apiCall;
     private final AnalyticsRuleSerializer serializer;
     public final static String RESOURCE_PATH = "/analytics/rules";
 
+    /**
+     * Creates a new AnalyticsRules instance.
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public AnalyticsRules(ApiCall apiCall) {
         this.apiCall = apiCall;
         this.serializer = new AnalyticsRuleSerializer();
     }
     
+    /**
+     * Creates a new AnalyticsRules instance.
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     * @param serializer the {@code AnalyticsRuleSerializer} serializer
+     */
     public AnalyticsRules(ApiCall apiCall, AnalyticsRuleSerializer serializer) {
         this.apiCall = apiCall;
         this.serializer = serializer;
@@ -28,6 +40,10 @@ public class AnalyticsRules {
      *
      * <p>
      * HTTP: POST /analytics/rules
+     *
+     * @param rules the {@code List<AnalyticsRuleCreate>} request body
+     * @return the {@code AnalyticsRulesResponse} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
      */
@@ -44,6 +60,9 @@ public class AnalyticsRules {
      *
      * <p>
      * HTTP: GET /analytics/rules
+     *
+     * @return the {@code List<AnalyticsRule>} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
      */
@@ -82,6 +101,10 @@ public class AnalyticsRules {
     public static class AnalyticsRulesResponse {
         private final List<AnalyticsRule> rules;
 
+        /**
+         * Creates a new AnalyticsRulesResponse instance.
+         * @param rules the {@code List<AnalyticsRule>} rules
+         */
         public AnalyticsRulesResponse(List<AnalyticsRule> rules) {
             this.rules = rules;
         }

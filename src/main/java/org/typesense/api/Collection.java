@@ -7,6 +7,9 @@ import org.typesense.model.CollectionUpdateSchema;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Typesense collection API wrapper.
+ */
 public class Collection {
 
     private final Configuration configuration;
@@ -43,6 +46,9 @@ public class Collection {
      * <p>
      * HTTP: GET /collections/{collectionName}
      *
+     * @return the {@code CollectionResponse} response
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
      */
     public CollectionResponse retrieve() throws Exception {
@@ -58,6 +64,10 @@ public class Collection {
      * <p>
      * HTTP: PATCH /collections/{collectionName}
      *
+     * @param c the {@code CollectionUpdateSchema} request body
+     * @return the {@code CollectionUpdateSchema} response
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
      */
     public CollectionUpdateSchema update(CollectionUpdateSchema c) throws Exception {
@@ -72,6 +82,9 @@ public class Collection {
      *
      * <p>
      * HTTP: DELETE /collections/{collectionName}
+     *
+     * @return the {@code CollectionResponse} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/collections.html">Typesense docs</a>
      */

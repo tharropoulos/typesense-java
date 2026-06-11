@@ -3,17 +3,31 @@ package org.typesense.api;
 import org.typesense.api.utils.URLEncoding;
 import org.typesense.model.AnalyticsRuleUpdate;
 
+/**
+ * Typesense analytics rule API wrapper.
+ */
 public class AnalyticsRule {
     private final ApiCall apiCall;
     private final String ruleId;
     private final AnalyticsRuleSerializer serializer;
 
+    /**
+     * Creates a new AnalyticsRule instance.
+     * @param ruleId the {@code String} path parameter
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public AnalyticsRule(String ruleId, ApiCall apiCall) {
         this.apiCall = apiCall;
         this.ruleId = ruleId;
         this.serializer = new AnalyticsRuleSerializer();
     }
     
+    /**
+     * Creates a new AnalyticsRule instance.
+     * @param ruleId the {@code String} path parameter
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     * @param serializer the {@code AnalyticsRuleSerializer} serializer
+     */
     public AnalyticsRule(String ruleId, ApiCall apiCall, AnalyticsRuleSerializer serializer) {
         this.apiCall = apiCall;
         this.ruleId = ruleId;
@@ -28,6 +42,9 @@ public class AnalyticsRule {
      *
      * <p>
      * HTTP: GET /analytics/rules/{ruleName}
+     *
+     * @return the {@code org.typesense.model.AnalyticsRule} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
      */
@@ -44,6 +61,9 @@ public class AnalyticsRule {
      *
      * <p>
      * HTTP: DELETE /analytics/rules/{ruleName}
+     *
+     * @return the {@code org.typesense.model.AnalyticsRule} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
      */
@@ -62,6 +82,10 @@ public class AnalyticsRule {
      *
      * <p>
      * HTTP: PUT /analytics/rules/{ruleName}
+     *
+     * @param rule the {@code AnalyticsRuleUpdate} request body
+     * @return the {@code org.typesense.model.AnalyticsRule} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/analytics-query-suggestions.html">Typesense docs</a>
      */

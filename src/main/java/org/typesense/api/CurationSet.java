@@ -5,11 +5,19 @@ import org.typesense.model.CurationSetCreateSchema;
 import org.typesense.model.CurationSetSchema;
 import org.typesense.model.CurationSetDeleteSchema;
 
+/**
+ * Typesense curation set API wrapper.
+ */
 public class CurationSet {
 
     private String curationSetName;
     private ApiCall apiCall;
 
+    /**
+     * Creates a new CurationSet instance.
+     * @param curationSetName the {@code String} path parameter
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public CurationSet(String curationSetName, ApiCall apiCall) {
         this.curationSetName = curationSetName;
         this.apiCall = apiCall;
@@ -23,6 +31,9 @@ public class CurationSet {
      *
      * <p>
      * HTTP: GET /curation_sets/{curationSetName}
+     *
+     * @return the {@code CurationSetCreateSchema} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/curation.html">Typesense docs</a>
      */
@@ -39,6 +50,10 @@ public class CurationSet {
      * <p>
      * HTTP: PUT /curation_sets/{curationSetName}
      *
+     * @param curationSetCreateSchema the {@code CurationSetCreateSchema} request body
+     * @return the {@code CurationSetSchema} response
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/curation.html">Typesense docs</a>
      */
     public CurationSetSchema upsert(CurationSetCreateSchema curationSetCreateSchema) throws Exception {
@@ -53,6 +68,9 @@ public class CurationSet {
      *
      * <p>
      * HTTP: DELETE /curation_sets/{curationSetName}
+     *
+     * @return the {@code CurationSetDeleteSchema} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/curation.html">Typesense docs</a>
      */

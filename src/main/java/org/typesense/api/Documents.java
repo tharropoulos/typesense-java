@@ -15,6 +15,9 @@ import org.typesense.model.SearchParameters;
 import org.typesense.model.SearchResult;
 import org.typesense.model.UpdateDocumentsParameters;
 
+/**
+ * Typesense documents API wrapper.
+ */
 public class Documents {
 
     private String collectionName;
@@ -38,6 +41,10 @@ public class Documents {
      * <p>
      * HTTP: POST /collections/{collectionName}/documents
      *
+     * @param document the {@code Map<String,Object>} request body
+     * @return the {@code Map<String,Object>} response map
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
     public Map<String, Object> create(Map<String, Object> document) throws Exception {
@@ -52,6 +59,10 @@ public class Documents {
      *
      * <p>
      * HTTP: POST /collections/{collectionName}/documents
+     *
+     * @param document the {@code String} request body
+     * @return the raw response body
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
@@ -68,6 +79,11 @@ public class Documents {
      * <p>
      * HTTP: POST /collections/{collectionName}/documents
      *
+     * @param document the {@code Map<String,Object>} request body
+     * @param queryParameters the {@code ImportDocumentsParameters} query parameters
+     * @return the raw response body
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
     public String create(Map<String, Object> document, ImportDocumentsParameters queryParameters) throws Exception {
@@ -82,6 +98,10 @@ public class Documents {
      *
      * <p>
      * HTTP: POST /collections/{collectionName}/documents
+     *
+     * @param document the {@code Map<String,Object>} request body
+     * @return the {@code Map<String,Object>} response map
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
@@ -101,6 +121,10 @@ public class Documents {
      * <p>
      * HTTP: GET /collections/{collectionName}/documents/search
      *
+     * @param searchParameters the {@code SearchParameters} query parameters
+     * @return the {@code SearchResult} response
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
     public SearchResult search(SearchParameters searchParameters) throws Exception {
@@ -115,6 +139,10 @@ public class Documents {
      *
      * <p>
      * HTTP: DELETE /collections/{collectionName}/documents
+     *
+     * @param queryParameters the {@code DeleteDocumentsParameters} query parameters
+     * @return the {@code Map<String,Object>} response map
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
@@ -131,6 +159,9 @@ public class Documents {
      * <p>
      * HTTP: GET /collections/{collectionName}/documents/export
      *
+     * @return the raw response body
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
     public String export() throws Exception {
@@ -145,6 +176,10 @@ public class Documents {
      *
      * <p>
      * HTTP: GET /collections/{collectionName}/documents/export
+     *
+     * @param exportDocumentsParameters the {@code ExportDocumentsParameters} query parameters
+     * @return the raw response body
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
@@ -161,6 +196,11 @@ public class Documents {
      * <p>
      * HTTP: POST /collections/{collectionName}/documents/import
      *
+     * @param document the {@code String} request body
+     * @param queryParameters the {@code ImportDocumentsParameters} query parameters
+     * @return the raw response body
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */
     public String import_(String document, ImportDocumentsParameters queryParameters) throws Exception {
@@ -175,6 +215,11 @@ public class Documents {
      *
      * <p>
      * HTTP: POST /collections/{collectionName}/documents/import
+     *
+     * @param documents the {@code Collection<?>} documents
+     * @param queryParameters the {@code ImportDocumentsParameters} query parameters
+     * @return the raw response body
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/documents.html">Typesense docs</a>
      */

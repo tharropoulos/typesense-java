@@ -6,11 +6,19 @@ import org.typesense.model.SynonymSetCreateSchema;
 import org.typesense.model.SynonymSetSchema;
 import org.typesense.model.SynonymSetDeleteSchema;
 
+/**
+ * Typesense synonym set API wrapper.
+ */
 public class SynonymSet {
 
     private String synonymSetName;
     private ApiCall apiCall;
 
+    /**
+     * Creates a new SynonymSet instance.
+     * @param synonymSetName the {@code String} path parameter
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public SynonymSet(String synonymSetName, ApiCall apiCall) {
         this.synonymSetName = synonymSetName;
         this.apiCall = apiCall;
@@ -24,6 +32,9 @@ public class SynonymSet {
      *
      * <p>
      * HTTP: GET /synonym_sets/{synonymSetName}
+     *
+     * @return the {@code SynonymSetCreateSchema} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/synonyms.html">Typesense docs</a>
      */
@@ -40,6 +51,10 @@ public class SynonymSet {
      * <p>
      * HTTP: PUT /synonym_sets/{synonymSetName}
      *
+     * @param synonymSetCreateSchema the {@code SynonymSetCreateSchema} request body
+     * @return the {@code SynonymSetSchema} response
+     * @throws Exception if the request fails
+     *
      * @see <a href="https://typesense.org/docs/latest/api/synonyms.html">Typesense docs</a>
      */
     public SynonymSetSchema upsert(SynonymSetCreateSchema synonymSetCreateSchema) throws Exception {
@@ -54,6 +69,9 @@ public class SynonymSet {
      *
      * <p>
      * HTTP: DELETE /synonym_sets/{synonymSetName}
+     *
+     * @return the {@code SynonymSetDeleteSchema} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/synonyms.html">Typesense docs</a>
      */

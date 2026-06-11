@@ -4,11 +4,18 @@ import java.util.List;
 import org.typesense.model.SynonymSetCreateSchema;
 import org.typesense.model.SynonymSetSchema;
 
+/**
+ * Typesense synonym sets API wrapper.
+ */
 public class SynonymSets {
 
     private ApiCall apiCall;
     public final static String RESOURCEPATH = "/synonym_sets";
 
+    /**
+     * Creates a new SynonymSets instance.
+     * @param apiCall the {@code ApiCall} instance used to send requests
+     */
     public SynonymSets(ApiCall apiCall) {
         this.apiCall = apiCall;
     }
@@ -21,6 +28,11 @@ public class SynonymSets {
      *
      * <p>
      * HTTP: PUT /synonym_sets/{synonymSetName}
+     *
+     * @param synonymSetName the {@code String} path parameter
+     * @param synonymSetCreateSchema the {@code SynonymSetCreateSchema} request body
+     * @return the {@code SynonymSetSchema} response
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/synonyms.html">Typesense docs</a>
      */
@@ -36,6 +48,9 @@ public class SynonymSets {
      *
      * <p>
      * HTTP: GET /synonym_sets/{synonymSetName}
+     *
+     * @return the {@code SynonymSetSchema[]} response array
+     * @throws Exception if the request fails
      *
      * @see <a href="https://typesense.org/docs/latest/api/synonyms.html">Typesense docs</a>
      */
